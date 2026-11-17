@@ -1,0 +1,28 @@
+# Simulation build artifacts and executables
+*.vvp
+*.out
+*.exe
+*.o
+*.bin
+
+# Waveform dumps
+*.vcd
+*.lxt
+*.ghw
+
+# Simulation generated outputs (keep directory structure)
+sim/output/*
+!sim/output/.gitkeep
+sim/waveforms/*
+!sim/waveforms/.gitkeep
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Editor and OS files
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.idea/
