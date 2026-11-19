@@ -62,3 +62,4 @@ vvp sim/tb_module.vvp
 # Open waveforms in GTKWave
 gtkwave sim/waveforms/tb_module.vcd
 ```
+

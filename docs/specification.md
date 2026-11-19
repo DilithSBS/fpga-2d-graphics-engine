@@ -74,3 +74,4 @@ Each foreground layer outputs:
 1. **Raster Timing Subsystem**: Sole owner of horizontal/vertical counters, active video generation, and sync pulses. Must contain zero game or shape logic.
 2. **Graphics Rendering Subsystem**: Consumes coordinates and object configuration to produce composite RGB pixel data.
 3. **Application / Game Controller**: Manages game state, physics, motion, and collision. Updates object descriptors during vertical blanking intervals (`frame_end`).
+

@@ -47,3 +47,4 @@ This document tracks all formal architectural and technical design decisions, tr
 * **Decision**: Explicitly clamp `pixel_x = 0` and `pixel_y = 0` whenever `active_video == 0`.
 * **Rationale**:
   Prevents downstream graphics rendering modules from addressing invalid memory or triggering spurious hit-tests during blanking.
+

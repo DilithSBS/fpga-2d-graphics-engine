@@ -77,3 +77,4 @@ flowchart LR
 * Runs at the frame boundary, triggered by `frame_end` (vertical blanking interval).
 * Computes object motion vectors, boundaries, inputs, and collisions.
 * Drives configuration registers (coordinates, sizes, colors) of the renderers without coupling directly to the pixel rendering pipeline.
+

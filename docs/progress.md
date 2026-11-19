@@ -8,11 +8,11 @@
   * [x] Repository directory layout verification.
   * [x] Project baseline documentation scaffolded.
   * [x] Minimal smoke test verification (iverilog compilation + vvp execution + VCD generation).
-* [ ] **M1: Raster Timing Generator**
-  * [ ] Architecture and interface definition.
-  * [ ] Implementation of `rtl/video/raster_timing.v`.
-  * [ ] Self-checking unit testbench `tb/unit/tb_raster_timing.v`.
-  * [ ] Waveform verification in GTKWave.
+* [x] **M1: Raster Timing Generator**
+  * [x] Architecture and interface definition.
+  * [x] Implementation of `rtl/video/raster_timing.v`.
+  * [x] Self-checking unit testbench `tb/unit/tb_raster_timing.v`.
+  * [x] Waveform verification in GTKWave (`sim/waveforms/tb_raster_timing.vcd`).
 * [ ] **M2: Background & Pixel Output**
   * [ ] RGB888 pixel interface definition.
   * [ ] Solid colors, color bars, checkerboard generator (`rtl/graphics/background_gen.v`).
