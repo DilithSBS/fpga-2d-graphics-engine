@@ -22,7 +22,7 @@ Every RTL module requires:
 | :--- | :--- | :--- | :--- | :--- |
 | **M0** | Smoke Test (Toolchain) | `tb/unit/tb_smoke.v` | **PASSED** | Basic compilation, VVP simulation, VCD dump |
 | **M1** | `raster_timing` | `tb/unit/tb_raster_timing.v` | **PASSED** | Exact 400 clocks/line, 262 lines/frame, sync pulse widths (HSYNC=48, VSYNC=800 clocks), active video window (320x240), blanking clamping (0 errors across 209,601 cycles) |
-| **M2** | `background_gen` | `tb/unit/tb_background.v` | Planned | Solid color, color bars, checkerboard, PPM image dump |
+| **M2** | `background_gen` | `tb/unit/tb_background.v` | **PASSED** | Solid color, color bars, checkerboard, gradient patterns, 0 errors, visual frame dumps (76,800 px/frame) to PPM & PNG |
 | **M3** | Shape Primitives | `tb/unit/tb_primitives.v` | Planned | Rectangle & circle boundary inclusion/exclusion, edge clipping |
 | **M4** | `layer_compositor` | `tb/unit/tb_compositor.v` | Planned | 4-layer priority muxing, 1-bit transparency, blanking blank-out |
 | **M5** | `sprite_renderer` | `tb/unit/tb_sprite.v` | Planned | ROM coordinate lookup, transparency masking, position off-screen |

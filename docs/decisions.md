@@ -48,3 +48,15 @@ This document tracks all formal architectural and technical design decisions, tr
 * **Rationale**:
   Prevents downstream graphics rendering modules from addressing invalid memory or triggering spurious hit-tests during blanking.
 
+---
+
+## ADR-005: Combinational Rendering for Primitives and Compositor
+* **Date**: 2026-11-20
+* **Status**: Approved
+* **Context**: Pixel renderers (`background_gen`, `rectangle_renderer`, `circle_renderer`) and `layer_compositor` can either be pipelined registers (adding 1 cycle latency per stage) or pure combinational logic.
+* **Decision**: Implement rendering primitives and the layer compositor as combinational modules (`always @*`), with optional registration at the top-level display output interface.
+* **Rationale**:
+  1. **Zero Pipeline Skew**: Rendering decisions execute in 0 clock cycles relative to `pixel_x`, `pixel_y`, and `active_video`. No matched delay pipelines are required for `hsync` and `vsync`.
+  2. **Timing Margin**: At our target pixel clock of 6.288 MHz, the clock period is $\approx 159.03\text{ ns}$. Combinational logic paths for boundary comparisons and priority multiplexing take $< 6\text{ ns}$, leaving $> 150\text{ ns}$ of timing slack.
+  3. **Simplicity and Modularity**: Individual renderers remain purely stateless functions of current coordinates and configuration registers.
+

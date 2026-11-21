@@ -13,10 +13,10 @@
   * [x] Implementation of `rtl/video/raster_timing.v`.
   * [x] Self-checking unit testbench `tb/unit/tb_raster_timing.v`.
   * [x] Waveform verification in GTKWave (`sim/waveforms/tb_raster_timing.vcd`).
-* [ ] **M2: Background & Pixel Output**
-  * [ ] RGB888 pixel interface definition.
-  * [ ] Solid colors, color bars, checkerboard generator (`rtl/graphics/background_gen.v`).
-  * [ ] Frame rendering to PPM/PNG via Python script.
+* [x] **M2: Background & Pixel Output**
+  * [x] RGB888 pixel interface definition.
+  * [x] Solid colors, color bars, checkerboard generator (`rtl/graphics/background_gen.v`).
+  * [x] Frame rendering to PPM/PNG via Python script (`sim/output/*.png`).
 * [ ] **M3: Graphics Primitives**
   * [ ] Rectangle renderer (`rtl/graphics/rectangle_renderer.v`).
   * [ ] Circle renderer (`rtl/graphics/circle_renderer.v`).
