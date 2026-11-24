@@ -24,6 +24,15 @@ All visual output is rendered cycle-by-cycle directly from synthesizable Verilog
 | ![Compositor](docs/images/frame_compositor.png) | ![Primitives](docs/images/frame_primitives.png) | ![Color Bars](docs/images/frame_bars.png) |
 | **4-Layer Priority Multiplexing** | **Rectangles & Circles** | **Procedural Background** |
 
+### Hardware Verification Waveforms (GTKWave)
+
+Cycle-accurate digital waveforms captured directly from simulation testbenches:
+
+| Raster Timing Generator | Layer Compositor Priority | Full-Chip Graphics System |
+| :---: | :---: | :---: |
+| ![Raster Timing Waveform](docs/images/waveform_raster_timing.png) | ![Compositor Waveform](docs/images/waveform_compositor.png) | ![Top System Waveform](docs/images/waveform_graphics_system.png) |
+| **Line Counters, Sync & Blanking** | **Layer Priority & Transparency** | **Full-Chip Output & Sync Timing** |
+
 ---
 
 ## Key Technical Specifications
