@@ -7,7 +7,7 @@ module sprite_renderer #(
     input   wire    [8:0]   pixel_x,        // Current beam X (0 to 319)
     input   wire    [8:0]   pixel_y,        // Current beam Y (0 to 239)
     input   wire            active_video,   // 1 = Active display, 0 = Blanking
-
+    input   wire    [2:0]   sprite_id,       // Sprite Id
     // Sprite descriptor
     input   wire            enable,         // 1 = Render sprite, 0 = Disabled
     input   wire    [8:0]   sprite_x,       // Upper-left corner X
@@ -35,24 +35,54 @@ module sprite_renderer #(
     reg [31:0] rom_row;
 
     always @* begin
-        case (dy)
-            4'd0:  rom_row = 32'h0001_4000; // . . . . . . . 1 1 . . . . . . .
-            4'd1:  rom_row = 32'h0007_D000; // . . . . . . 1 3 3 1 . . . . . .
-            4'd2:  rom_row = 32'h0007_D000; // . . . . . . 1 3 3 1 . . . . . .
-            4'd3:  rom_row = 32'h001B_E400; // . . . . . 1 2 3 3 2 1 . . . . .
-            4'd4:  rom_row = 32'h001A_A400; // . . . . . 1 2 2 2 2 1 . . . . .
-            4'd5:  rom_row = 32'h006A_A900; // . . . . 1 2 2 2 2 2 2 1 . . . .
-            4'd6:  rom_row = 32'h006A_A900; // . . . . 1 2 2 2 2 2 2 1 . . . .
-            4'd7:  rom_row = 32'h01A5_5A40; // . . . 1 2 2 1 1 1 1 2 2 1 . . .
-            4'd8:  rom_row = 32'h0690_0690; // . . 1 2 2 1 . . . . 1 2 2 1 . .
-            4'd9:  rom_row = 32'h1690_01A4; // . 1 2 2 1 . . . . . . 1 2 2 1 .
-            4'd10: rom_row = 32'h6A90_01A9; // 1 2 2 2 1 . . . . . . 1 2 2 2 1
-            4'd11: rom_row = 32'h6A95_56A9; // 1 2 2 2 2 1 1 1 1 1 1 2 2 2 2 1
-            4'd12: rom_row = 32'h556A_A955; // 1 1 1 1 1 2 2 2 2 2 2 1 1 1 1 1
-            4'd13: rom_row = 32'h005F_F500; // . . . . 1 1 3 3 3 3 1 1 . . . .
-            4'd14: rom_row = 32'h001F_F400; // . . . . . 1 3 3 3 3 1 . . . . .
-            4'd15: rom_row = 32'h0007_D000; // . . . . . . 1 3 3 1 . . . . . .
-            default: rom_row = 32'h0000_0000;
+        case (sprite_id[1:0])
+            2'b00: begin
+                case (dy)
+                    4'd0:  rom_row = 32'h0001_4000; // . . . . . . . 1 1 . . . . . . .
+                    4'd1:  rom_row = 32'h0007_D000; // . . . . . . 1 3 3 1 . . . . . .
+                    4'd2:  rom_row = 32'h0007_D000; // . . . . . . 1 3 3 1 . . . . . .
+                    4'd3:  rom_row = 32'h001B_E400; // . . . . . 1 2 3 3 2 1 . . . . .
+                    4'd4:  rom_row = 32'h001A_A400; // . . . . . 1 2 2 2 2 1 . . . . .
+                    4'd5:  rom_row = 32'h006A_A900; // . . . . 1 2 2 2 2 2 2 1 . . . .
+                    4'd6:  rom_row = 32'h006A_A900; // . . . . 1 2 2 2 2 2 2 1 . . . .
+                    4'd7:  rom_row = 32'h01A5_5A40; // . . . 1 2 2 1 1 1 1 2 2 1 . . .
+                    4'd8:  rom_row = 32'h0690_0690; // . . 1 2 2 1 . . . . 1 2 2 1 . .
+                    4'd9:  rom_row = 32'h1690_01A4; // . 1 2 2 1 . . . . . . 1 2 2 1 .
+                    4'd10: rom_row = 32'h6A90_01A9; // 1 2 2 2 1 . . . . . . 1 2 2 2 1
+                    4'd11: rom_row = 32'h6A95_56A9; // 1 2 2 2 2 1 1 1 1 1 1 2 2 2 2 1
+                    4'd12: rom_row = 32'h556A_A955; // 1 1 1 1 1 2 2 2 2 2 2 1 1 1 1 1
+                    4'd13: rom_row = 32'h005F_F500; // . . . . 1 1 3 3 3 3 1 1 . . . .
+                    4'd14: rom_row = 32'h001F_F400; // . . . . . 1 3 3 3 3 1 . . . . .
+                    4'd15: rom_row = 32'h0007_D000; // . . . . . . 1 3 3 1 . . . . . .
+                    default: rom_row = 32'h0000_0000;
+                endcase
+            end
+            2'b01: begin
+                case (dy)
+                    // Asteroid 32-bit row table (sprite_id == 2'b01)
+                    4'd0:  rom_row = 32'h0055_5500; // . . . . 1 1 1 1 1 1 . . . . . .
+                    4'd1:  rom_row = 32'h05FA_AA50; // . . 1 1 3 3 2 2 2 2 1 1 . . . .
+                    4'd2:  rom_row = 32'h1FEA_56A4; // . 1 3 3 3 2 2 2 1 1 2 2 1 . . .
+                    4'd3:  rom_row = 32'h1EAA_5568; // . 1 3 2 2 2 2 1 1 1 1 2 2 1 . .
+                    4'd4:  rom_row = 32'h7AAA_55A8; // 1 3 2 2 2 2 2 1 1 1 1 2 2 2 1 .
+                    4'd5:  rom_row = 32'h7A5A_A5A8; // 1 3 2 1 1 2 2 2 1 1 2 2 2 2 1 .
+                    4'd6:  rom_row = 32'h655A_AAAA; // 1 2 1 1 1 1 2 2 2 2 2 2 2 2 1 .
+                    4'd7:  rom_row = 32'h655A_AEAA; // 1 2 1 1 1 1 2 2 2 2 3 3 2 2 1 .
+                    4'd8:  rom_row = 32'h6A5A_AFAA; // 1 2 2 1 1 2 2 2 2 3 3 3 2 2 1 .
+                    4'd9:  rom_row = 32'h6AAA_AAEA; // 1 2 2 2 2 2 2 2 2 2 3 2 2 2 1 .
+                    4'd10: rom_row = 32'h1AA5_AAA4; // . 1 2 2 2 1 1 2 2 2 2 2 2 1 . .
+                    4'd11: rom_row = 32'h1A55_AAA4; // . 1 2 2 1 1 1 1 2 2 2 2 2 1 . .
+                    4'd12: rom_row = 32'h0655_AA60; // . . 1 2 1 1 1 1 2 2 2 2 1 . . .
+                    4'd13: rom_row = 32'h06A5_AA40; // . . 1 2 2 1 1 2 2 2 2 1 . . . .
+                    4'd14: rom_row = 32'h015A_AA50; // . . . 1 1 2 2 2 2 1 1 . . . . .
+                    4'd15: rom_row = 32'h0005_5000; // . . . . . 1 1 1 1 . . . . . . .
+                    default: rom_row = 32'h0000_0000;
+                endcase
+            end
+
+            default: begin
+                rom_row = 32'h0000_0000;    
+            end
         endcase
     end
 
@@ -66,16 +96,24 @@ module sprite_renderer #(
             pixel_rgb   = 24'h000000;
         end else begin
             pixel_valid = 1'b1;
-            case (sprite_pixel)
-                2'b01:   pixel_rgb = 24'h1A202C; // Dark Outline
-                2'b10:   pixel_rgb = 24'h00D8D6; // Cyan Hull
-                2'b11:   pixel_rgb = 24'hFF6B6B; // Orange Flame / Cockpit
-                default: pixel_rgb = 24'h000000;
-            endcase
+            if (sprite_id == 2'b00) begin
+                case (sprite_pixel)
+                    2'b01:   pixel_rgb = 24'h1A202C; // Dark Outline
+                    2'b10:   pixel_rgb = 24'h00D8D6; // Cyan Hull
+                    2'b11:   pixel_rgb = 24'hFF6B6B; // Orange Flame / Cockpit
+                    default: pixel_rgb = 24'h000000;
+                endcase
+            end
+            else if (sprite_id == 2'b01) begin
+                case (sprite_pixel)
+                    2'b01:   pixel_rgb = 24'h4A5568; // Shadow / Outline
+                    2'b10:   pixel_rgb = 24'h718096; // Rock Gray
+                    2'b11:   pixel_rgb = 24'hCBD5E0; // Highlight
+                    default: pixel_rgb = 24'h000000;
+                endcase
+            end
         end
     end
-
-    
 
 
 endmodule

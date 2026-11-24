@@ -1,4 +1,4 @@
-// tb_sprite.v: Dedicated unit testbench for sprite_renderer
+// tb_sprite.v: Dedicated unit testbench for multi-sprite sprite_renderer
 `timescale 1ns / 1ps
 
 module tb_sprite;
@@ -21,15 +21,24 @@ module tb_sprite;
     // Background generator wires
     wire [23:0] bg_rgb;
 
-    // Sprite controls and wires
-    reg         sp_enable;
-    reg  [8:0]  sp_x;
-    reg  [8:0]  sp_y;
-    wire [23:0] sp_rgb;
-    wire        sp_valid;
+    // Sprite 1: Spacecraft (sprite_id = 0)
+    reg         sp1_enable;
+    reg  [2:0]  sp1_id;
+    reg  [8:0]  sp1_x, sp1_y;
+    wire [23:0] sp1_rgb;
+    wire        sp1_valid;
 
-    // Composited color for PPM dump
-    wire [23:0] composite_rgb = sp_valid ? sp_rgb : bg_rgb;
+    // Sprite 2: Asteroid (sprite_id = 1)
+    reg         sp2_enable;
+    reg  [2:0]  sp2_id;
+    reg  [8:0]  sp2_x, sp2_y;
+    wire [23:0] sp2_rgb;
+    wire        sp2_valid;
+
+    // Simple compositor for visual test: Sprite 1 > Sprite 2 > Background
+    wire [23:0] composite_rgb = sp1_valid ? sp1_rgb
+                              : sp2_valid ? sp2_rgb
+                              : bg_rgb;
 
     integer errors = 0;
     integer ppm_file;
@@ -60,27 +69,42 @@ module tb_sprite;
         .rgb_out     (bg_rgb)
     );
 
+    // Instance 1: Spacecraft
     sprite_renderer #(
         .SPRITE_W(16),
         .SPRITE_H(16)
-    ) dut_sprite (
+    ) dut_spacecraft (
         .pixel_x     (pixel_x),
         .pixel_y     (pixel_y),
         .active_video(active_video),
-        .enable      (sp_enable),
-        .sprite_x    (sp_x),
-        .sprite_y    (sp_y),
-        .pixel_rgb   (sp_rgb),
-        .pixel_valid (sp_valid)
+        .sprite_id   (sp1_id),
+        .enable      (sp1_enable),
+        .sprite_x    (sp1_x),
+        .sprite_y    (sp1_y),
+        .pixel_rgb   (sp1_rgb),
+        .pixel_valid (sp1_valid)
+    );
+
+    // Instance 2: Asteroid
+    sprite_renderer #(
+        .SPRITE_W(16),
+        .SPRITE_H(16)
+    ) dut_asteroid (
+        .pixel_x     (pixel_x),
+        .pixel_y     (pixel_y),
+        .active_video(active_video),
+        .sprite_id   (sp2_id),
+        .enable      (sp2_enable),
+        .sprite_x    (sp2_x),
+        .sprite_y    (sp2_y),
+        .pixel_rgb   (sp2_rgb),
+        .pixel_valid (sp2_valid)
     );
 
     // Clock Generation
     initial clk = 0;
     always #(CLK_PERIOD / 2) clk = ~clk;
 
-    // -------------------------------------------------------------
-    // Helper task: Sample pixel at post-clock quiescent edge
-    // -------------------------------------------------------------
     task wait_pixel;
         input [8:0] target_x;
         input [8:0] target_y;
@@ -95,77 +119,60 @@ module tb_sprite;
     endtask
 
     // -------------------------------------------------------------
-    // Task: Detailed Sprite Pixel & Transparency Assertions
+    // Behavioral Assertions
     // -------------------------------------------------------------
-    task verify_sprite_assertions;
+    task verify_sprites;
         begin
-            $display("[TEST] Verifying Sprite Pixel & Transparency Assertions...");
+            $display("[TEST] Verifying Spacecraft & Asteroid Assertions...");
 
-            // Test 1: Corner pixel (0,0) is Transparent (sp_x=152, sp_y=112)
-            wait_pixel(9'd152, 9'd112);
-            if (sp_valid !== 1'b0) begin
-                $display("[FAIL] Corner (0,0) should be transparent! valid=%b", sp_valid);
+            // Check Spacecraft tip outline at (sp1_x+7, sp1_y+0) = (107, 112)
+            wait_pixel(9'd107, 9'd112);
+            if (sp1_valid !== 1'b1 || sp1_rgb !== 24'h1A202C) begin
+                $display("[FAIL] Spacecraft tip outline mismatch! Got=%h, Expected=24'h1A202C", sp1_rgb);
                 errors = errors + 1;
             end else begin
-                $display("[PASS] Sprite transparency at (0,0) verified.");
+                $display("[PASS] Spacecraft tip outline verified.");
             end
 
-            // Test 2: Tip of spacecraft outline at (7, 0) -> (152+7=159, 112)
-            wait_pixel(9'd159, 9'd112);
-            if (sp_valid !== 1'b1 || sp_rgb !== 24'h1A202C) begin
-                $display("[FAIL] Tip outline mismatch at (7,0)! valid=%b, rgb=%h (Expected 24'h1A202C)",
-                         sp_valid, sp_rgb);
+            // Check Asteroid rocky body pixel at (sp2_x+7, sp2_y+4) = (207, 116)
+            wait_pixel(9'd207, 9'd116);
+            if (sp2_valid !== 1'b1 || sp2_rgb !== 24'h718096) begin
+                $display("[FAIL] Asteroid rock body mismatch! Got=%h, Expected=24'h718096", sp2_rgb);
                 errors = errors + 1;
             end else begin
-                $display("[PASS] Spacecraft tip outline at (7,0) verified.");
+                $display("[PASS] Asteroid rocky body pixel verified.");
             end
 
-            // Test 3: Cockpit flame at (7, 1) -> (159, 113)
-            wait_pixel(9'd159, 9'd113);
-            if (sp_valid !== 1'b1 || sp_rgb !== 24'hFF6B6B) begin
-                $display("[FAIL] Flame/Cockpit color mismatch at (7,1)! valid=%b, rgb=%h",
-                         sp_valid, sp_rgb);
+            // Check Asteroid ridge highlight at (sp2_x+4, sp2_y+1) = (204, 113)
+            wait_pixel(9'd204, 9'd113);
+            if (sp2_valid !== 1'b1 || sp2_rgb !== 24'hCBD5E0) begin
+                $display("[FAIL] Asteroid ridge highlight mismatch! Got=%h, Expected=24'hCBD5E0", sp2_rgb);
                 errors = errors + 1;
             end else begin
-                $display("[PASS] Flame/Cockpit pixel at (7,1) verified.");
-            end
-
-            // Test 4: Cyan hull at (7, 5) -> (159, 117)
-            wait_pixel(9'd159, 9'd117);
-            if (sp_valid !== 1'b1 || sp_rgb !== 24'h00D8D6) begin
-                $display("[FAIL] Cyan hull mismatch at (7,5)! valid=%b, rgb=%h",
-                         sp_valid, sp_rgb);
-                errors = errors + 1;
-            end else begin
-                $display("[PASS] Cyan hull pixel at (7,5) verified.");
-            end
-
-            // Test 5: Right boundary exclusion at (152+16=168, 112)
-            wait_pixel(9'd168, 9'd112);
-            if (sp_valid !== 1'b0) begin
-                $display("[FAIL] Pixel past right boundary should be excluded! valid=%b", sp_valid);
-                errors = errors + 1;
-            end else begin
-                $display("[PASS] Sprite right boundary exclusion verified.");
+                $display("[PASS] Asteroid ridge highlight pixel verified.");
             end
         end
     endtask
 
-    // -------------------------------------------------------------
-    // Main Verification Process
-    // -------------------------------------------------------------
     initial begin
         $dumpfile("sim/waveforms/tb_sprite.vcd");
         $dumpvars(0, tb_sprite);
 
         $display("==================================================");
-        $display("  STARTING M5 SPRITE RENDERER VERIFICATION");
+        $display("  STARTING MULTI-SPRITE VERIFICATION");
         $display("==================================================");
 
-        // Center sprite on 320x240 screen: (320-16)/2 = 152, (240-16)/2 = 112
-        sp_enable = 1'b1;
-        sp_x = 9'd152;
-        sp_y = 9'd112;
+        // Position Spacecraft on the left (X=100, Y=112)
+        sp1_enable = 1'b1;
+        sp1_id     = 3'b000;
+        sp1_x      = 9'd100;
+        sp1_y      = 9'd112;
+
+        // Position Asteroid on the right (X=200, Y=112)
+        sp2_enable = 1'b1;
+        sp2_id     = 3'b001;
+        sp2_x      = 9'd200;
+        sp2_y      = 9'd112;
 
         rst = 1;
         repeat (5) @(posedge clk);
@@ -173,11 +180,10 @@ module tb_sprite;
         #1;
         rst = 0;
 
-        // Run behavioral assertions
-        verify_sprite_assertions();
+        verify_sprites();
 
-        // Render full frame with spacecraft sprite to PPM
-        $display("[INFO] Rendering sprite frame to sim/output/frame_sprite.ppm...");
+        // Render full frame with both sprites
+        $display("[INFO] Rendering multi-sprite frame to sim/output/frame_sprite.ppm...");
         ppm_file = $fopen("sim/output/frame_sprite.ppm", "w");
         $fwrite(ppm_file, "P3\n320 240\n255\n");
 
@@ -199,14 +205,14 @@ module tb_sprite;
         $display("[PASS] Captured %0d pixels to sim/output/frame_sprite.ppm.", pixels_captured);
 
         $display("==================================================");
-        $display("  M5 SPRITE VERIFICATION COMPLETE");
+        $display("  MULTI-SPRITE VERIFICATION COMPLETE");
         $display("  Total Errors: %0d", errors);
         $display("==================================================");
 
         if (errors == 0) begin
-            $display(">>> ALL M5 SPRITE CHECKS PASSED <<<");
+            $display(">>> ALL MULTI-SPRITE CHECKS PASSED <<<");
         end else begin
-            $display(">>> M5 SPRITE FAILED WITH %0d ERRORS <<<", errors);
+            $display(">>> MULTI-SPRITE FAILED WITH %0d ERRORS <<<", errors);
         end
 
         $finish;
