@@ -49,6 +49,19 @@ fpga-2d-graphics-engine/
 * **Scripting / Image Inspection**: Python 3.x with `Pillow`.
 * **Version Control**: Git.
 
+## Interactive Hardware Play (Co-Simulation)
+
+You can interactively play the game directly on your computer. Your keystrokes drive the Verilog input registers, and each video frame is rendered directly by the hardware simulation:
+
+```powershell
+python scripts/play_game.py
+```
+
+### Controls:
+* **Arrow Keys / WASD**: Steer Spacecraft
+* **R**: Restart Game after Collision
+* **ESC**: Exit
+
 ## Simulation Quickstart
 
 To run unit or integration simulations:
