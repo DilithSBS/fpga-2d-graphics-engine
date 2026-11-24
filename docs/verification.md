@@ -27,5 +27,5 @@ Every RTL module requires:
 | **M4** | `layer_compositor` | `tb/unit/tb_compositor.v` | **PASSED** | 8-state priority matrix, 1-bit transparency, blanking clamping, multi-layer overlapping visual render to PPM & PNG |
 | **M5** | `sprite_renderer` | `tb/unit/tb_sprite.v` | **PASSED** | 16x16 ROM lookup, transparency masking, 4-color palette, coordinate offsets, 0 errors, visual render to PPM & PNG |
 | **M6** | `game_controller` | `tb/integration/tb_game.v` | **PASSED** | VBlank-synchronized state update, player motion, asteroid bouncing physics, AABB collision detection, game-over latch, visual gameplay frames to PPM & PNG |
-| **M7** | Full System Top | `tb/integration/tb_graphics_system.v` | Planned | End-to-end frame generation, multi-frame video sequence |
+| **M7** | Full System Top | `tb/integration/tb_graphics_system.v` | **PASSED** | End-to-end full chip top-level frame generation, reset verification, 76,800 pixels captured to PPM & PNG, 0 errors |
 
