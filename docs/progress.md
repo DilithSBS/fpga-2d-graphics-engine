@@ -32,10 +32,14 @@
   * [x] Sprite coordinate mapping, transparency, and bounding tests.
   * [x] Dedicated unit testbench (`tb/unit/tb_sprite.v`).
   * [x] Visual sprite render (`sim/output/frame_sprite.png`).
-* [ ] **M6: Game Integration**
-  * [ ] Generic game controller (`rtl/game/game_controller.v`).
-  * [ ] Frame-synchronized state/position updates on VBlank.
-  * [ ] Collision detection logic.
+* [x] **M6: Game Integration**
+  * [x] Generic game controller (`rtl/game/game_controller.v`).
+  * [x] Frame-synchronized state/position updates on VBlank.
+  * [x] Player directional control and boundary clamping.
+  * [x] Asteroid bouncing physics.
+  * [x] Real-time hardware AABB collision detection.
+  * [x] Integration testbench (`tb/integration/tb_game.v`).
+  * [x] Visual gameplay sequence rendering (`sim/output/game_frame_*.png`).
 * [ ] **M7: Final Verification and Refinement**
   * [ ] Full-chip simulation and video sequence validation.
   * [ ] Timing analysis, code cleanup, and complete technical report.
