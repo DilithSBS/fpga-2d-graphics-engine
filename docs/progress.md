@@ -22,10 +22,11 @@
   * [x] Circle renderer (`rtl/graphics/circle_renderer.v`).
   * [x] Unit testbenches and boundary coverage (`tb/unit/tb_primitives.v`).
   * [x] Visual rendering verification (`sim/output/frame_primitives.png`).
-* [ ] **M4: Layer Compositor**
-  * [ ] 4-layer priority compositor (`rtl/graphics/layer_compositor.v`).
-  * [ ] 1-bit transparency handling and blanking suppression.
-  * [ ] Multi-layer integration testbench.
+* [x] **M4: Layer Compositor**
+  * [x] 4-layer priority compositor (`rtl/graphics/layer_compositor.v`).
+  * [x] 1-bit transparency handling and blanking suppression.
+  * [x] Multi-layer integration testbench (`tb/unit/tb_compositor.v`).
+  * [x] Overlapping layers visual verification (`sim/output/frame_compositor.png`).
 * [ ] **M5: Sprite Rendering**
   * [ ] ROM-based sprite storage.
   * [ ] Sprite coordinate mapping, transparency, and bounding tests.
