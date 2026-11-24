@@ -17,10 +17,11 @@
   * [x] RGB888 pixel interface definition.
   * [x] Solid colors, color bars, checkerboard generator (`rtl/graphics/background_gen.v`).
   * [x] Frame rendering to PPM/PNG via Python script (`sim/output/*.png`).
-* [ ] **M3: Graphics Primitives**
-  * [ ] Rectangle renderer (`rtl/graphics/rectangle_renderer.v`).
-  * [ ] Circle renderer (`rtl/graphics/circle_renderer.v`).
-  * [ ] Unit testbenches and boundary coverage.
+* [x] **M3: Graphics Primitives**
+  * [x] Rectangle renderer (`rtl/graphics/rectangle_renderer.v`).
+  * [x] Circle renderer (`rtl/graphics/circle_renderer.v`).
+  * [x] Unit testbenches and boundary coverage (`tb/unit/tb_primitives.v`).
+  * [x] Visual rendering verification (`sim/output/frame_primitives.png`).
 * [ ] **M4: Layer Compositor**
   * [ ] 4-layer priority compositor (`rtl/graphics/layer_compositor.v`).
   * [ ] 1-bit transparency handling and blanking suppression.

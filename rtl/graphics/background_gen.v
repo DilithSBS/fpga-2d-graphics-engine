@@ -32,7 +32,6 @@ module background_gen (
             rgb_out = 24'h000000;
         end
 
-
         else if (bg_mode == 2'b00) begin
             color_solid = solid_color;
             rgb_out = color_solid;

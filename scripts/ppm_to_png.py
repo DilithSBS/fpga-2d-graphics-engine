@@ -24,3 +24,4 @@ def convert_all_ppm(directory="sim/output"):
 
 if __name__ == "__main__":
     convert_all_ppm()
+
