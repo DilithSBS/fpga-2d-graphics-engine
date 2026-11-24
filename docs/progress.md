@@ -27,9 +27,11 @@
   * [x] 1-bit transparency handling and blanking suppression.
   * [x] Multi-layer integration testbench (`tb/unit/tb_compositor.v`).
   * [x] Overlapping layers visual verification (`sim/output/frame_compositor.png`).
-* [ ] **M5: Sprite Rendering**
-  * [ ] ROM-based sprite storage.
-  * [ ] Sprite coordinate mapping, transparency, and bounding tests.
+* [x] **M5: Sprite Rendering**
+  * [x] ROM-based sprite storage (16x16 2-bit indexed spacecraft).
+  * [x] Sprite coordinate mapping, transparency, and bounding tests.
+  * [x] Dedicated unit testbench (`tb/unit/tb_sprite.v`).
+  * [x] Visual sprite render (`sim/output/frame_sprite.png`).
 * [ ] **M6: Game Integration**
   * [ ] Generic game controller (`rtl/game/game_controller.v`).
   * [ ] Frame-synchronized state/position updates on VBlank.
