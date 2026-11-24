@@ -45,5 +45,7 @@
   * [x] End-to-end system integration testbench (`tb/integration/tb_graphics_system.v`).
   * [x] Complete chip frame rendering (`sim/output/top_system_frame.png`).
   * [x] Full architectural and verification documentation finalized.
-  * [ ] Full-chip simulation and video sequence validation.
-  * [ ] Timing analysis, code cleanup, and complete technical report.
+  * [x] Full-chip simulation and video sequence validation.
+  * [x] Timing analysis, code cleanup, and complete technical report.
+  * [x] Interactive desktop arcade co-simulation environment (`scripts/play_game.py`).
+  * [x] Automated regression suite (`scripts/run_all_tests.py`).
